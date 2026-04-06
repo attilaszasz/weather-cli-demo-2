@@ -3,18 +3,23 @@ package output
 import (
 	"encoding/json"
 	"io"
+	"time"
 
 	"weather-cli/src/internal/weather"
 )
 
-// SuccessPayload is the approved MVP success JSON shape.
+const successStatus = "success"
+
+// SuccessPayload is the stable public success JSON shape.
 type SuccessPayload struct {
-	Coordinates CoordinatesPayload `json:"coordinates"`
-	Current     CurrentPayload     `json:"current"`
-	Source      SourcePayload      `json:"source"`
+	Status    string          `json:"status"`
+	Timestamp string          `json:"timestamp"`
+	Location  LocationPayload `json:"location"`
+	Current   CurrentPayload  `json:"current"`
+	Source    SourcePayload   `json:"source"`
 }
 
-type CoordinatesPayload struct {
+type LocationPayload struct {
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
 }
@@ -31,10 +36,12 @@ type SourcePayload struct {
 	Name string `json:"name"`
 }
 
-// NewSuccessPayload maps domain values into the MVP JSON response.
-func NewSuccessPayload(coordinates weather.Coordinates, current weather.CurrentWeather) SuccessPayload {
+// NewSuccessPayload maps domain values into the stable public JSON response.
+func NewSuccessPayload(coordinates weather.Coordinates, current weather.CurrentWeather, generatedAt time.Time) SuccessPayload {
 	return SuccessPayload{
-		Coordinates: CoordinatesPayload{
+		Status:    successStatus,
+		Timestamp: generatedAt.UTC().Format(time.RFC3339),
+		Location: LocationPayload{
 			Latitude:  coordinates.Latitude,
 			Longitude: coordinates.Longitude,
 		},

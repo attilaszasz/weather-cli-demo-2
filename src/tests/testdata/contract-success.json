@@ -1,0 +1,18 @@
+{
+  "status": "success",
+  "timestamp": "2026-04-06T09:15:00Z",
+  "location": {
+    "latitude": 44.4268,
+    "longitude": 26.1025
+  },
+  "current": {
+    "temperature": 14.2,
+    "wind_speed": 7.1,
+    "wind_direction": 220,
+    "weather_code": 3,
+    "observation_timestamp": "2026-04-06T10:00"
+  },
+  "source": {
+    "name": "open-meteo"
+  }
+}

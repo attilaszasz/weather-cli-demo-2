@@ -22,7 +22,7 @@ Product: weather-cli | Created: 2026-04-06 | Status: Draft | Total Epics: 4 (P1:
 > Add delivery automation early so packaging, testing, and release behavior are validated before contract hardening and future-proofing work expands the codebase.
 
 - [X] E002 [P1] [TECHNICAL] {SAD:ADR-005} CI Release Bootstrap — GitHub Actions and GoReleaser pipeline for build, test, and multi-platform artifacts
-- [ ] E003 [P1] [PRODUCT] [P] {PRD:CAP-003,CAP-004}{SAD:ADR-003,ADR-004} JSON Contract Hardening — stable success and failure envelopes with exit-code semantics and tests
+- [X] E003 [P1] [PRODUCT] [P] {PRD:CAP-003,CAP-004}{SAD:ADR-003,ADR-004} JSON Contract Hardening — stable success and failure envelopes with exit-code semantics and tests
 
 ### Wave 3 — Evolution Readiness
 

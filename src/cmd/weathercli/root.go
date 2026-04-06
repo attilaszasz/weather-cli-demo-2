@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/spf13/cobra"
 
+	"weather-cli/src/internal/exitcode"
 	"weather-cli/src/internal/output"
 	"weather-cli/src/internal/provider/openmeteo"
 	"weather-cli/src/internal/validation"
@@ -21,6 +22,8 @@ type weatherService interface {
 var newWeatherService = func() weatherService {
 	return weather.NewService(openmeteo.NewClient())
 }
+
+var now = time.Now
 
 func newRootCommand() *cobra.Command {
 	var latitudeInput string
@@ -55,30 +58,21 @@ func run(ctx context.Context, latitudeInput, longitudeInput string, stdout io.Wr
 		return writeFailure(stdout, err)
 	}
 
-	successPayload := output.NewSuccessPayload(coordinates, currentWeather)
+	successPayload := output.NewSuccessPayload(coordinates, currentWeather, now())
 	if err := output.WriteJSON(stdout, successPayload); err != nil {
-		return fmt.Errorf("write success payload: %w", err)
+		return exitcode.Wrap(exitcode.Internal, fmt.Errorf("write success payload: %w", err))
 	}
 
 	return nil
 }
 
 func writeFailure(stdout io.Writer, err error) error {
-	failure := output.NewFailurePayload("internal_error", err.Error())
-
-	var validationErr *validation.Error
-	if errors.As(err, &validationErr) {
-		failure = output.NewFailurePayload(string(validationErr.Type), validationErr.Message)
-	}
-
-	var providerErr *openmeteo.Error
-	if errors.As(err, &providerErr) {
-		failure = output.NewFailurePayload(string(providerErr.Type), providerErr.Message)
-	}
+	descriptor := output.DescribeFailure(err)
+	failure := output.NewFailurePayload(descriptor, now())
 
 	if writeErr := output.WriteJSON(stdout, failure); writeErr != nil {
-		return fmt.Errorf("write failure payload: %w", writeErr)
+		return exitcode.Wrap(exitcode.Internal, fmt.Errorf("write failure payload: %w", writeErr))
 	}
 
-	return err
+	return exitcode.Wrap(descriptor.ExitCode, err)
 }
