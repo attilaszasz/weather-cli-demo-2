@@ -1,0 +1,36 @@
+version: 2
+
+project_name: weathercli
+
+before:
+  hooks:
+    - go test ./...
+
+builds:
+  - id: weathercli
+    binary: weathercli
+    main: ./src/cmd/weathercli
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+
+# Archive names stay simple and stable for maintainers and later epics.
+archives:
+  - id: default
+    formats:
+      - tar.gz
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+snapshot:
+  version_template: "{{ .Version }}-snapshot"
+
+release:
+  disable: auto

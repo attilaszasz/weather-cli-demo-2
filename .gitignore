@@ -1,6 +1,7 @@
 /weather-cli ignores
 /bin/
 /coverage.out
+/dist/
 
 # IDE and OS
 .DS_Store
