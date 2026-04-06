@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"weather-cli/src/internal/provider"
 )
 
 func TestFetchCurrentWeatherSuccess(t *testing.T) {
@@ -34,7 +36,7 @@ func TestFetchCurrentWeatherSuccess(t *testing.T) {
 		t.Fatalf("expected success, got error: %v", err)
 	}
 
-	if response.Current.Time == "" {
+	if response.ObservationTimestamp == "" {
 		t.Fatal("expected current time to be populated")
 	}
 }
@@ -51,7 +53,7 @@ func TestNewClientDefaults(t *testing.T) {
 }
 
 func TestProviderErrorString(t *testing.T) {
-	err := &Error{Type: ErrorTypeData, Message: "provider response missing current.time"}
+	err := &provider.Error{Type: provider.ErrorTypeData, Message: "provider response missing current.time"}
 	if err.Error() != "provider response missing current.time" {
 		t.Fatalf("unexpected error string: %s", err.Error())
 	}
@@ -69,12 +71,12 @@ func TestFetchCurrentWeatherTransportFailure(t *testing.T) {
 		t.Fatal("expected transport error, got nil")
 	}
 
-	providerErr, ok := AsError(err)
+	providerErr, ok := err.(*provider.Error)
 	if !ok {
 		t.Fatalf("expected provider error, got %T", err)
 	}
 
-	if providerErr.Type != ErrorTypeTransport {
+	if providerErr.Type != provider.ErrorTypeTransport {
 		t.Fatalf("unexpected provider error type: %s", providerErr.Type)
 	}
 }
@@ -92,12 +94,12 @@ func TestFetchCurrentWeatherInvalidPayload(t *testing.T) {
 		t.Fatal("expected provider data error, got nil")
 	}
 
-	providerErr, ok := AsError(err)
+	providerErr, ok := err.(*provider.Error)
 	if !ok {
 		t.Fatalf("expected provider error, got %T", err)
 	}
 
-	if providerErr.Type != ErrorTypeData {
+	if providerErr.Type != provider.ErrorTypeData {
 		t.Fatalf("unexpected provider error type: %s", providerErr.Type)
 	}
 }

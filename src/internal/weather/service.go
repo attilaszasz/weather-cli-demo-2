@@ -3,21 +3,16 @@ package weather
 import (
 	"context"
 
-	"weather-cli/src/internal/provider/openmeteo"
+	"weather-cli/src/internal/provider"
 )
-
-// ProviderClient captures the provider dependency needed by the service.
-type ProviderClient interface {
-	FetchCurrentWeather(ctx context.Context, latitude, longitude float64) (openmeteo.Response, error)
-}
 
 // Service orchestrates current-weather retrieval.
 type Service struct {
-	client ProviderClient
+	client provider.Client
 }
 
 // NewService builds a Service.
-func NewService(client ProviderClient) *Service {
+func NewService(client provider.Client) *Service {
 	return &Service{client: client}
 }
 
@@ -29,10 +24,10 @@ func (s *Service) GetCurrentWeather(ctx context.Context, coordinates Coordinates
 	}
 
 	return CurrentWeather{
-		Temperature:          response.Current.Temperature2M,
-		WindSpeed:            response.Current.WindSpeed10M,
-		WindDirection:        response.Current.WindDirection10M,
-		WeatherCode:          response.Current.WeatherCode,
-		ObservationTimestamp: response.Current.Time,
+		Temperature:          response.Temperature,
+		WindSpeed:            response.WindSpeed,
+		WindDirection:        response.WindDirection,
+		WeatherCode:          response.WeatherCode,
+		ObservationTimestamp: response.ObservationTimestamp,
 	}, nil
 }

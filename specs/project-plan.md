@@ -28,7 +28,7 @@ Product: weather-cli | Created: 2026-04-06 | Status: Draft | Total Epics: 4 (P1:
 
 > Refine internal boundaries so provider-specific concerns stay isolated as the product grows beyond the first provider.
 
-- [ ] E004 [P2] [TECHNICAL] {PRD:CAP-005}{SAD:ADR-002} Provider Abstraction — internal adapter boundary and compatibility protections for future provider changes
+- [X] E004 [P2] [TECHNICAL] {PRD:CAP-005}{SAD:ADR-002} Provider Abstraction — internal adapter boundary and compatibility protections for future provider changes
 
 ## Dependency Diagram
 

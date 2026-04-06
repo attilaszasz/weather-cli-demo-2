@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"weather-cli/src/internal/exitcode"
-	"weather-cli/src/internal/provider/openmeteo"
+	"weather-cli/src/internal/provider"
 	"weather-cli/src/internal/validation"
 )
 
@@ -49,17 +49,17 @@ func DescribeFailure(err error) FailureDescriptor {
 		}
 	}
 
-	var providerErr *openmeteo.Error
+	var providerErr *provider.Error
 	if errors.As(err, &providerErr) {
 		switch providerErr.Type {
-		case openmeteo.ErrorTypeTransport:
+		case provider.ErrorTypeTransport:
 			return FailureDescriptor{
 				Code:      "network_error",
 				Message:   providerErr.Message,
 				Retryable: true,
 				ExitCode:  exitcode.Network,
 			}
-		case openmeteo.ErrorTypeData:
+		case provider.ErrorTypeData:
 			return FailureDescriptor{
 				Code:      "provider_error",
 				Message:   providerErr.Message,

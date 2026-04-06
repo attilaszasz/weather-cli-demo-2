@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"weather-cli/src/internal/exitcode"
-	"weather-cli/src/internal/provider/openmeteo"
+	"weather-cli/src/internal/provider"
 	"weather-cli/src/internal/validation"
 	"weather-cli/src/internal/weather"
 )
@@ -80,7 +80,7 @@ func TestDescribeFailureValidation(t *testing.T) {
 }
 
 func TestDescribeFailureNetwork(t *testing.T) {
-	payload := DescribeFailure(&openmeteo.Error{Type: openmeteo.ErrorTypeTransport, Message: "provider request failed"})
+	payload := DescribeFailure(&provider.Error{Type: provider.ErrorTypeTransport, Message: "provider request failed"})
 
 	if payload.Code != "network_error" {
 		t.Fatalf("unexpected error type: %s", payload.Code)
@@ -92,7 +92,7 @@ func TestDescribeFailureNetwork(t *testing.T) {
 }
 
 func TestDescribeFailureProvider(t *testing.T) {
-	payload := DescribeFailure(&openmeteo.Error{Type: openmeteo.ErrorTypeData, Message: "provider response missing current.time"})
+	payload := DescribeFailure(&provider.Error{Type: provider.ErrorTypeData, Message: "provider response missing current.time"})
 
 	if payload.Code != "provider_error" {
 		t.Fatalf("unexpected error type: %s", payload.Code)

@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"weather-cli/src/internal/exitcode"
-	"weather-cli/src/internal/provider/openmeteo"
+	"weather-cli/src/internal/provider"
 	"weather-cli/src/internal/weather"
 )
 
@@ -127,8 +127,8 @@ func TestRunProviderFailure(t *testing.T) {
 	t.Cleanup(func() { now = originalNow })
 
 	service := &stubWeatherService{
-		err: &openmeteo.Error{
-			Type:    openmeteo.ErrorTypeTransport,
+		err: &provider.Error{
+			Type:    provider.ErrorTypeTransport,
 			Message: "provider request failed",
 		},
 	}
@@ -164,8 +164,8 @@ func TestRunProviderDataFailure(t *testing.T) {
 	t.Cleanup(func() { now = originalNow })
 
 	service := &stubWeatherService{
-		err: &openmeteo.Error{
-			Type:    openmeteo.ErrorTypeData,
+		err: &provider.Error{
+			Type:    provider.ErrorTypeData,
 			Message: "provider response missing current.time",
 		},
 	}

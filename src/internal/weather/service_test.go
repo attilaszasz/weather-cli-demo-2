@@ -5,29 +5,30 @@ import (
 	"errors"
 	"testing"
 
-	"weather-cli/src/internal/provider/openmeteo"
+	"weather-cli/src/internal/provider"
 )
 
 type fakeProviderClient struct {
-	response openmeteo.Response
+	response provider.CurrentWeather
 	err      error
 }
 
-func (f fakeProviderClient) FetchCurrentWeather(ctx context.Context, latitude, longitude float64) (openmeteo.Response, error) {
+func (f fakeProviderClient) FetchCurrentWeather(ctx context.Context, latitude, longitude float64) (provider.CurrentWeather, error) {
 	if f.err != nil {
-		return openmeteo.Response{}, f.err
+		return provider.CurrentWeather{}, f.err
 	}
 
 	return f.response, nil
 }
 
 func TestGetCurrentWeatherSuccess(t *testing.T) {
-	var response openmeteo.Response
-	response.Current.Time = "2026-04-06T10:00"
-	response.Current.Temperature2M = 14.2
-	response.Current.WindSpeed10M = 7.1
-	response.Current.WindDirection10M = 220
-	response.Current.WeatherCode = 3
+	response := provider.CurrentWeather{
+		ObservationTimestamp: "2026-04-06T10:00",
+		Temperature:          14.2,
+		WindSpeed:            7.1,
+		WindDirection:        220,
+		WeatherCode:          3,
+	}
 
 	service := NewService(fakeProviderClient{response: response})
 	currentWeather, err := service.GetCurrentWeather(context.Background(), Coordinates{
@@ -44,7 +45,7 @@ func TestGetCurrentWeatherSuccess(t *testing.T) {
 }
 
 func TestGetCurrentWeatherFailure(t *testing.T) {
-	expectedErr := &openmeteo.Error{Type: openmeteo.ErrorTypeTransport, Message: "provider request failed"}
+	expectedErr := &provider.Error{Type: provider.ErrorTypeTransport, Message: "provider request failed"}
 	service := NewService(fakeProviderClient{err: expectedErr})
 
 	_, err := service.GetCurrentWeather(context.Background(), Coordinates{
