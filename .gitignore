@@ -1,0 +1,9 @@
+/weather-cli ignores
+/bin/
+/coverage.out
+
+# IDE and OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

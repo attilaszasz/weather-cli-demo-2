@@ -15,7 +15,7 @@ Product: weather-cli | Created: 2026-04-06 | Status: Draft | Total Epics: 4 (P1:
 
 > Establish the first working weather lookup path end to end: command entry, coordinate validation, Open-Meteo retrieval, and basic normalized success output.
 
-- [ ] E001 [P1] [PRODUCT] {PRD:CAP-001,CAP-002}{SAD:ADR-001,ADR-002} CLI Weather Flow — standalone Go CLI with coordinate input and live current-weather retrieval
+- [X] E001 [P1] [PRODUCT] {PRD:CAP-001,CAP-002}{SAD:ADR-001,ADR-002} CLI Weather Flow — standalone Go CLI with coordinate input and live current-weather retrieval
 
 ### Wave 2 — Delivery Foundation
 
