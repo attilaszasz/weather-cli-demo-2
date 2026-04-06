@@ -34,7 +34,7 @@ Product: weather-cli | Created: 2026-04-06 | Status: Draft | Total Epics: 5 (P1:
 
 > Publish a root-level README that explains installation, invocation, JSON behavior, and release consumption using the now-stable CLI contract and release flow.
 
-- [ ] E005 [P2] [PRODUCT] {PRD:CAP-001,CAP-003,CAP-004}{SAD:ADR-003,ADR-004,ADR-005} User Documentation — repo-root README with install, usage, output, and failure guidance
+- [X] E005 [P2] [PRODUCT] {PRD:CAP-001,CAP-003,CAP-004}{SAD:ADR-003,ADR-004,ADR-005} User Documentation — repo-root README with install, usage, output, and failure guidance
 
 ## Dependency Diagram
 
