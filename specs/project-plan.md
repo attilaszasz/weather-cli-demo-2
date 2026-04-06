@@ -7,7 +7,7 @@ dod_source:
 
 # Project Implementation Plan
 
-Product: weather-cli | Created: 2026-04-06 | Status: Draft | Total Epics: 4 (P1: 3, P2: 1, P3: 0) | Waves: 3
+Product: weather-cli | Created: 2026-04-06 | Status: Draft | Total Epics: 5 (P1: 3, P2: 2, P3: 0) | Waves: 4
 
 ## Epic Checklist
 
@@ -30,6 +30,12 @@ Product: weather-cli | Created: 2026-04-06 | Status: Draft | Total Epics: 4 (P1:
 
 - [X] E004 [P2] [TECHNICAL] {PRD:CAP-005}{SAD:ADR-002} Provider Abstraction — internal adapter boundary and compatibility protections for future provider changes
 
+### Wave 4 — User Enablement
+
+> Publish a root-level README that explains installation, invocation, JSON behavior, and release consumption using the now-stable CLI contract and release flow.
+
+- [ ] E005 [P2] [PRODUCT] {PRD:CAP-001,CAP-003,CAP-004}{SAD:ADR-003,ADR-004,ADR-005} User Documentation — repo-root README with install, usage, output, and failure guidance
+
 ## Dependency Diagram
 
 ```mermaid
@@ -41,7 +47,11 @@ graph LR
     E003 --> M2([Stable MVP contract])
     M1 --> E004["E004<br>Provider Abstraction"]
     M2 --> E004
-    E004 --> F([Project MVP+ baseline])
+    E004 --> M3([Internal boundary ready])
+    M1 --> E005["E005<br>User Documentation"]
+    M2 --> E005
+    M3 --> E005
+    E005 --> F([Project MVP+ baseline])
 ```
 
 ## Execution Wave Summary
@@ -51,6 +61,7 @@ graph LR
 | 1 | E001 | No | Establishes the runnable CLI structure, weather fetch path, and shared domain baseline |
 | 2 | E002, E003 | Yes | CI/release automation and contract hardening can proceed together once the first runnable flow exists |
 | 3 | E004 | No | Depends on both stable release automation and a settled response contract |
+| 4 | E005 | No | Depends on the release path, stable contract, and provider-boundary cleanup so docs reflect the shipped product accurately |
 
 ## Parallel Execution Guidance
 
@@ -67,6 +78,8 @@ graph LR
 | E001 -> E003 | Contract hardening may require reshaping models created during the first runnable CLI implementation |
 | E001 -> E002 | Packaging assumptions may change if the CLI entrypoint layout or build target names drift during early implementation |
 | E002 + E004 | Provider abstraction changes may require release-path updates if binary naming, config, or module layout changes |
+| E003 -> E005 | Documentation can become inaccurate if contract examples are written before the final JSON and exit-code semantics settle |
+| E004 -> E005 | Internal refactors may change architectural explanation and install guidance if the README is written too early |
 
 ### Shared Resource Conflicts
 
@@ -75,6 +88,7 @@ graph LR
 | `/src/cmd` and `/src/internal` package layout | E001 | E003 and E004 must extend the structure without renaming core paths unexpectedly |
 | Release workflow configuration | E002 | Later packaging or naming changes from E004 may require synchronized workflow updates |
 | Response schema fixtures | E003 | E004 must preserve contract fixtures while changing provider internals |
+| Root `README.md` documentation | E005 | Must stay aligned with the stabilized CLI contract, release artifacts, and provider notes from prior epics |
 
 ## Epic Details
 
@@ -181,6 +195,32 @@ graph LR
 - Constraints: Keep Open-Meteo as default MVP provider; no user-facing provider-selection feature yet
 - **Pipeline hints**: `skip_clarify`, `lightweight`
 
+### E005 — User Documentation
+
+- **Category**: PRODUCT
+- **Priority**: P2
+- **Source**: `{PRD:CAP-001,CAP-003,CAP-004}{SAD:ADR-003,ADR-004,ADR-005}`
+- **Scope**: Create a user-facing `README.md` at the repository root that explains what weather-cli does, how to install or obtain binaries, how to run it with coordinates, what the success and failure JSON look like, and how release artifacts are consumed. This epic turns the implemented product into something a new user can discover and use without reading internal specs.
+- **Actors**: CLI user, maintainer, release consumer
+- **Key entities**: README, install guidance, usage examples, JSON examples, exit-code guidance, release notes expectations
+- **Depends on**: E002, E003, E004
+- **Dependency contracts**: Requires the canonical release workflow and artifact naming from E002, the stable JSON and exit-code contract from E003, and the final provider-boundary description from E004
+- **Depended on by**: none
+- **Produces (shared)**: Root `README.md`, canonical quick-start instructions, user-facing contract examples, contributor orientation entrypoint
+- **Constraints**: Must live at repository root as `README.md`; must reflect shipped behavior rather than planned behavior; must avoid contradicting the stable CLI contract or release process
+- **Acceptance criteria**:
+- [ ] A repository-root `README.md` explains the product purpose and current scope
+- [ ] The README documents how to obtain or build the executable and how to run it with latitude and longitude
+- [ ] The README includes representative success and failure JSON examples aligned with the stable contract
+- [ ] The README explains non-zero exit-code behavior and links users to the release path or artifacts
+- **Specify input**:
+- Description: Create user documentation as a root-level README covering installation, usage, JSON output, and failure behavior for weather-cli
+- Actors: CLI users, maintainers, release consumers
+- Key entities: README, install steps, usage examples, JSON examples, exit-code notes
+- Depends on artifacts: E002 release configuration, E003 contract fixtures, E004 stabilized internal baseline
+- Constraints: Keep it user-facing, concise, and aligned to actual repo behavior
+- **Pipeline hints**: `skip_clarify`, `lightweight`
+
 ## Coverage Validation
 
 ### PRD Coverage
@@ -238,7 +278,8 @@ graph LR
 |-------------------|---------------|-------------|
 | CLI command layer | E001 | E002, E003 |
 | Release workflow and GoReleaser config | E002 | E004 |
-| Contract fixtures and exit-code map | E003 | E004 |
+| Contract fixtures and exit-code map | E003 | E004, E005 |
+| Root README documentation | E005 | Maintainers, users, release consumers |
 
 ## Wave Transition Protocol
 
