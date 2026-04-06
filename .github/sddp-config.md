@@ -4,11 +4,11 @@
 
 ## Product Document
 
-**Path**: 
+**Path**: specs/prd.md
 
 ## Technical Context Document
 
-**Path**: 
+**Path**: specs/sad.md
 
 ## Deployment & Operations Document
 
@@ -16,7 +16,7 @@
 
 ## Project Plan
 
-**Path**: 
+**Path**: specs/project-plan.md
 
 ## Checklist Settings
 
@@ -24,7 +24,7 @@
 
 ## Autopilot
 
-**Enabled**: false
+**Enabled**: true
 
 ## Loop Settings
 
@@ -41,5 +41,5 @@
 
 <!-- Managed by /sddp-init. QC reads this section — do not edit manually. -->
 
-**Coverage Target**: 
-**Required Categories**: 
+**Coverage Target**: 80
+**Required Categories**: linting, security, coverage, performance

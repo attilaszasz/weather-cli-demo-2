@@ -1,23 +1,25 @@
 <!-- template-version: 2 -->
-# [PROJECT_NAME] Project Instructions
+# weather-cli Project Instructions
 
 ## Core Principles
 
-<!-- 3–7 non-negotiable principles. Each: succinct name, MUST/SHOULD rule, rationale. Add or remove ### blocks as needed. -->
+### I. Simplicity First
 
-### I. [PRINCIPLE_NAME]
+The project MUST optimize for the smallest implementation that delivers the current CLI value cleanly, and SHOULD reject speculative features beyond the documented MVP scope — a narrow, understandable codebase is the fastest path to a dependable standalone executable.
 
-[PRINCIPLE_RULE] — [PRINCIPLE_RATIONALE]
+### II. Contract Stability
 
-### II. [PRINCIPLE_NAME]
+Public CLI behavior MUST remain stable once introduced, especially argument semantics, JSON response structure, and exit-code meaning — automation users depend on predictable interfaces more than on rapid feature expansion.
 
-[PRINCIPLE_RULE] — [PRINCIPLE_RATIONALE]
+### III. Testable Reliability
 
-### III. [PRINCIPLE_NAME]
+All shipped behavior MUST be covered by automated checks appropriate to the risk, with special focus on validation, provider integration boundaries, JSON contracts, and release safety — reliability for a CLI product is only credible when failure paths and packaging are verifiable.
 
-[PRINCIPLE_RULE] — [PRINCIPLE_RATIONALE]
+### IV. Release Automation Early
 
-### IV. Agent Output Style
+Build, test, lint, security scanning, and cross-platform release automation MUST be established early and kept green as the product evolves — distributable binaries are a core product outcome, not a late-stage packaging detail.
+
+### V. Agent Output Style
 
 All agent output MUST be concise and outcome-oriented. This principle supersedes any verbose defaults.
 
@@ -30,33 +32,28 @@ All agent output MUST be concise and outcome-oriented. This principle supersedes
 
 ## Technology Stack
 
-<!-- Downstream phases (Plan, QC, Autopilot) read this section as the authoritative tech-stack reference. -->
-
-- **Language/Runtime**: [e.g., TypeScript 5.x / Node 22, Python 3.12, Rust 1.78, Go 1.22]
-- **Frameworks**: [e.g., Next.js 15, Django 5, Actix-web]
-- **Storage**: [e.g., PostgreSQL 16, Redis 7, SQLite — or "none"]
-- **Infrastructure**: [e.g., Docker, AWS ECS, Vercel, bare metal — or "local only"]
+- **Language/Runtime**: Go 1.24
+- **Frameworks**: Cobra, Go standard library, Open-Meteo integration client, GoReleaser
+- **Storage**: none
+- **Infrastructure**: local CLI runtime, GitHub Actions CI, GitHub Releases artifact distribution
 
 ## Testing & Quality Policy
 
-<!-- QC extracts enforcement rules from this section. Use the keywords below so automated checks activate correctly. -->
-<!-- Keywords recognised by QC: lint, static analysis, code quality, coverage, security, vulnerability, OWASP, WCAG, accessibility, benchmark, performance -->
-
-- **Coverage Target**: [e.g., 80% | 100% | none — omit to skip coverage enforcement]
-- **Required QC Categories**: [e.g., linting, security scanning, accessibility — omit categories you do not require]
-- **Test Strategy**: [e.g., Unit + integration; E2E for critical paths; TDD mandatory]
-- **Linting / Formatting**: [e.g., ESLint + Prettier strict, Clippy, Ruff — or "none"]
+- **Coverage Target**: 80%
+- **Required QC Categories**: linting, security scanning, coverage, performance
+- **Test Strategy**: Test-after with unit and integration coverage for validation, provider mapping, JSON contracts, and release-critical paths; benchmark critical command latency when behavior stabilizes
+- **Linting / Formatting**: golangci-lint, `gofmt`, and `go test` must pass cleanly
 
 ## Source Code Layout
 
-- **Policy**: [ENFORCE_SRC_ROOT | PRESERVE_EXISTING_LAYOUT]
-- **Convention**: [e.g., Source code under /src; tests co-located in __tests__/; config at repo root]
+- **Policy**: ENFORCE_SRC_ROOT
+- **Convention**: All source code lives under `/src`; repository-root files are limited to governance, configuration, release automation, and documentation; tests may live under `/src` packages or a dedicated `/tests` directory when justified
 
 ## Development Workflow
 
-- **Branching**: [e.g., Feature branches from main, squash merge]
-- **Commit Convention**: [e.g., Conventional Commits, free-form]
-- **CI Requirements**: [e.g., All tests pass, lint clean, no type errors before merge]
+- **Branching**: Feature branches from main with squash merge
+- **Commit Convention**: Conventional Commits
+- **CI Requirements**: All pull requests and release candidates must pass `go test`, lint, security scanning, and cross-platform build validation before merge or publication
 
 <!-- Optional: add additional sections below (Security Requirements, Performance Standards, Compliance, etc.) -->
 
@@ -67,6 +64,8 @@ All agent output MUST be concise and outcome-oriented. This principle supersedes
 - All implementations MUST pass the Instructions Check gate during planning.
 - Complexity beyond these principles MUST be justified and documented.
 
-[GOVERNANCE_ADDITIONAL_RULES]
+- Bootstrap document registrations in `.github/sddp-config.md` for `specs/prd.md`, `specs/sad.md`, and `specs/project-plan.md` MUST be preserved unless explicitly replaced by the user.
+- Changes that affect the CLI contract, provider boundary, or release automation MUST update the relevant bootstrap artifacts before downstream implementation continues.
+- Source-code layout enforcement applies to implementation files only; workflow files, release configuration, and governance documents may remain at repository-standard locations outside `/src`.
 
-**Version**: [INSTRUCTIONS_VERSION] | **Last Amended**: [LAST_AMENDED_DATE]
+**Version**: 1.0.0 | **Last Amended**: 2026-04-06
